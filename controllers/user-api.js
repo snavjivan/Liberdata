@@ -78,29 +78,79 @@ router.post('/top-sites', (req, res) => {
     res.json(response);
 })
 
-router.post('/favorite-videos')
+router.post('/favorite-videos', (req, res) => {
+    var videos = globalHostMap.get('www.youtube.com');
+    if (videos) {
+        for (var video of videos) {
+            if (video.title.includes('- YouTube')) {
+                var dashIndex = search.title.indexOf('-');
+                var trimmedVideo = search.title.substring(0, dashIndex);
+                console.log(trimmedVideo);
+                //do nlp stuff to get categories here
+            }
+        }
+    }
+})
 
 router.post('/search-interests', (req, res) => {
     var searches = globalHostMap.get('www.google.com');
-    for (var search of searches) {
-        if (search.title.includes('- Google Search')) {
-            var dashIndex = search.title.indexOf('-');
-            var trimmedSearch = search.title.substring(0, dashIndex);
-            console.log(trimmedSearch);
-            //do nlp stuff to get categories here
+    if (searches) {
+        for (var search of searches) {
+            if (search.title.includes('- Google Search')) {
+                var dashIndex = search.title.indexOf('-');
+                var trimmedSearch = search.title.substring(0, dashIndex);
+                console.log(trimmedSearch);
+                //do nlp stuff to get categories here
+            }
         }
+    } else {
+        res.json('None');
     }
 })
 
 router.post('/social-media-interests', (req, res) => {
     //for facebook
+    var fbJson = '';
     var fbHistory = globalHostMap.get('www.facebook.com');
+    if (fbHistory) {
+        for (var fb of fbHistory) {
+            console.log(fb);
+        }
+    } else {
+        fbJson = 'None'
+    }
     //for reddit
-
+    var redditJson = '';
+    var redditHistory = globalHostMap.get('www.reddit.com');
+    if (redditHistory) {
+        for (var reddit of redditHistory) {
+            console.log(reddit.title);
+            //do nlp title to get categories here.
+        }
+    } else {
+        //no reddit history
+        redditJson = 'None';
+    }
     //for twitter
+    //combine above results into 1 json
 })
 
 //maybe add gmail
+router.post('/email-interests', (req, res) => {
+    var emailHistory = globalHostMap.get('mail.google.com');
+    if (emailHistory) {
+        for (var email of emailHistory) {
+            if (email.title.includes('- Gmail')) {
+                var dashIndex = email.title.indexOf('-');
+                var trimmedEmail = email.title.substring(0, dashIndex);
+                console.log(trimmedEmail);
+                //do nlp stuff here
+            }
+        }
+    } else {
+        res.json('None');
+    }
+})
 //maybe use spotify api
 
 module.exports = router;
