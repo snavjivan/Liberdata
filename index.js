@@ -4,10 +4,11 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json());
+
 // Serve the static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
-
-app.use(bodyParser.urlencoded({ extended: false }))
 
 // An api endpoint that returns a short list of items
 app.get('/api/list', (req,res) => {
