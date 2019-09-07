@@ -2,10 +2,11 @@ const url = require('url');
 const express = require('express');
 const router = express.Router();
 
+globalHostMap = new Map();
+
 router.post('/postHistory', (req, res) => {
     var hostMap = new Map();
     req.body.value.forEach(element => {
-        //console.log(element.url);
         var myURL = new URL(element.url);
         console.log(myURL.host);
         if (!hostMap.get(myURL.host)) {
@@ -20,6 +21,7 @@ router.post('/postHistory', (req, res) => {
         hostMap.get(key).forEach(element => console.log(element))
     }
     console.log(hostMap.keys());
+    globalHostMap = hostMap;
     var response = "dummy response";
     res.json(response)
 })
