@@ -2,6 +2,7 @@ const url = require('url');
 const express = require('express');
 const router = express.Router();
 
+//TODO: pls replace
 globalHostMap = new Map();
 
 router.post('/postHistory', (req, res) => {
@@ -14,6 +15,7 @@ router.post('/postHistory', (req, res) => {
             hostURLList.push(element);
             hostMap.set(myURL.host, hostURLList);
         } else {
+            //change this so it adds repeat views together instead of repeat them in the array
             hostMap.get(myURL.host).push(element);
         }
     });
@@ -30,11 +32,51 @@ router.post('/postHistory', (req, res) => {
 router.post('/raw-data', (req, res) => {
     var response = JSON.stringify([...globalHostMap]);
     console.log(globalHostMap);
-    console.log(response);
     res.json(response);
 })
 
-router.post('/top-sites')
+//can take in the number of top sites, defaults to 5
+//use siteNum property in front end
+//this excludes google search as a popular site
+router.post('/top-sites', (req, res) => {
+    var numSites;
+    if (!req.body.siteNum) {
+        numSites = 5;
+    } else {
+        numSites = req.body.siteNum;
+    }
+    var topSites = new Map();
+    for (var key of globalHostMap.keys()) {
+        if (key != 'www.google.com') {
+            var numViews = 0;
+            //gets number of views for a certain key
+            globalHostMap.get(key).forEach(value => {
+                numViews += value.visitCount;
+            });
+            if (topSites.size < numSites - 1) {
+                topSites.set(key, numViews);
+            } else {
+                //gets least popular site in the map
+                var smallestKey;
+                var smallestViewNum;
+                for (var topSite of topSites.keys()) {
+                    if (!smallestKey || topSites.get(topSite) < smallestViewNum) {
+                        smallestKey = topSite;
+                        smallestViewNum = topSites.get(smallestKey);
+                    }
+                }
+                //replaces if current site has more views than least popular site
+                if (numViews > smallestViewNum) {
+                    topSites.delete(smallestKey);
+                    topSites.set(key, numViews);
+                }
+            }
+        }
+    }
+    console.log(topSites);
+    var response = JSON.stringify([...topSites]);
+    res.json(response);
+})
 
 router.post('/favorite-videos')
 
