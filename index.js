@@ -1,16 +1,26 @@
 const express = require('express');
 const path = require('path');
+const bodyParser = require('body-parser');
 
 const app = express();
 
 // Serve the static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
 
+app.use(bodyParser.urlencoded({ extended: false }))
+
 // An api endpoint that returns a short list of items
 app.get('/api/list', (req,res) => {
     var list = ["item1", "item2", "item3"];
     res.json(list);
     console.log('Sent list of items');
+});
+
+//post request test for getting history
+app.post('/api/postHistory', (req, res) => {
+    console.log(req.body);
+    var response = "dummy response";
+    res.json(response)
 });
 
 const port = process.env.PORT || 5000;
