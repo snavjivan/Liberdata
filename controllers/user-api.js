@@ -81,11 +81,26 @@ router.post('/top-sites', (req, res) => {
 router.post('/favorite-videos')
 
 router.post('/search-interests', (req, res) => {
-    //globalHostMap = 
+    var searches = globalHostMap.get('www.google.com');
+    for (var search of searches) {
+        if (search.title.includes('- Google Search')) {
+            var dashIndex = search.title.indexOf('-');
+            var trimmedSearch = search.title.substring(0, dashIndex);
+            console.log(trimmedSearch);
+            //do nlp stuff to get categories here
+        }
+    }
 })
 
-router.post('/social-media-interests')
+router.post('/social-media-interests', (req, res) => {
+    //for facebook
+    var fbHistory = globalHostMap.get('www.facebook.com');
+    //for reddit
 
+    //for twitter
+})
+
+//maybe add gmail
 //maybe use spotify api
 
 module.exports = router;
