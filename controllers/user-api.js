@@ -21,9 +21,29 @@ router.post('/postHistory', (req, res) => {
         hostMap.get(key).forEach(element => console.log(element))
     }
     console.log(hostMap.keys());
+    //should change this to use a database
     globalHostMap = hostMap;
     var response = "dummy response";
     res.json(response)
 })
+
+router.post('/raw-data', (req, res) => {
+    var response = JSON.stringify([...globalHostMap]);
+    console.log(globalHostMap);
+    console.log(response);
+    res.json(response);
+})
+
+router.post('/top-sites')
+
+router.post('/favorite-videos')
+
+router.post('/search-interests', (req, res) => {
+    //globalHostMap = 
+})
+
+router.post('/social-media-interests')
+
+//maybe use spotify api
 
 module.exports = router;
