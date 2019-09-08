@@ -81,7 +81,7 @@ router.get('/top-sites', (req, res) => {
         }
     }
     console.log(topSites);
-    var response = JSON.stringify([...topSites]);
+    var response = [...topSites];
     res.json(response);
 })
 
