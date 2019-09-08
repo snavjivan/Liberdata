@@ -96,21 +96,34 @@ router.post('/favorite-videos', (req, res) => {
 router.post('/search-interests', (req, res) => {
     var searches = globalHostMap.get('www.google.com');
     var batchedSearch = [];
-    if(searches){
+    if (searches) {
       for (var search of searches) {
-            if (search.title.includes('- Google Search')) {
-                var dashIndex = search.title.indexOf('-');
-                var trimmedSearch = search.title.substring(0, dashIndex);
-                console.log(trimmedSearch);
-
-                batchedSearch.push(trimmedSearch);
-            }
+        if (search.title.includes('- Google Search')) {
+            var dashIndex = search.title.indexOf('-');
+            var trimmedSearch = search.title.substring(0, dashIndex);
+            console.log(trimmedSearch);
+            batchedSearch.push(trimmedSearch);
+        }
+        var categories;
+        var counter = 0;
+        var totalBatch = [];
+        for (var batchSearch of batchedSearch) {
+          if (counter >= 10) {
+            //console.log(batchSearch);
+            analyzeSyntaxOfText(totalBatch)
+              .then(cat => console.log(cat.name))
+              .catch(console.log);
+              totalBatch = [];
+              counter = 0;
+          } else if (counter < 10){
+            totalBatch.push(batchSearch);
+            counter++;
+          }
+        }
       }
     } else {
-      res.JSON('None')
+      res.json('None')
     }
-    analyzeSyntaxOfText(batchedSearch.join(":_) ")).then(console.log
-    ).catch(console.log);
 })
 
 router.post('/social-media-interests', (req, res) => {
@@ -140,6 +153,22 @@ router.post('/social-media-interests', (req, res) => {
     //combine above results into 1 json
 })
 
+router.post('/email-interests', (req, res) => {
+    var emailHistory = globalHostMap.get('mail.google.com');
+    if (emailHistory) {
+        for (var email of emailHistory) {
+            if (email.title.includes('- Gmail')) {
+                var dashIndex = email.title.indexOf('-');
+                var trimmedEmail = email.title.substring(0, dashIndex);
+                console.log(trimmedEmail);
+                //do nlp stuff here
+            }
+        }
+    } else {
+        res.json('None');
+    }
+})
+
 async function analyzeSyntaxOfText(text) {
   const language = require('@google-cloud/language');
   const client = new language.LanguageServiceClient();
@@ -157,22 +186,29 @@ async function analyzeSyntaxOfText(text) {
   return {name, confidence};
 }
 
-//maybe add gmail
-router.post('/email-interests', (req, res) => {
-    var emailHistory = globalHostMap.get('mail.google.com');
-    if (emailHistory) {
-        for (var email of emailHistory) {
-            if (email.title.includes('- Gmail')) {
-                var dashIndex = email.title.indexOf('-');
-                var trimmedEmail = email.title.substring(0, dashIndex);
-                console.log(trimmedEmail);
-                //do nlp stuff here
-            }
-        }
-    } else {
-        res.json('None');
-    }
-})
-//maybe use spotify api
+// async function getCategories(batch, threshold) {
+//   var currentClassification = {name: 'none', confidence: 0};
+//   var categoryMap = new Map();
+//   var currentBatch = [];
+//   for (var entry of batch) {
+//     var text = currentBatch.join(',');
+//     analyzeSyntaxOfText(text)
+//       .then(cat => {
+//         // var categoryName = currentClassification.name;
+//         // var categoryConf = currentClassification.confidence;
+//         // if (cat.name !== categoryName || cat.confidence < threshold) {
+//         //   categoryMap.set(categoryName, categoryConf);
+//         //   currentClassification = cat;
+//         //   currentBatch = [];
+//         // } else {
+//         //   var averageConf = (categoryConf + cat.confidence) / 2;
+//         //   currentClassification.confidence = averageConf;
+//         // }
+//         console.log(cat.name);
+//
+//       })
+//       .catch(err => currentBatch.push(entry));
+//   }
+// }
 
 module.exports = router;
