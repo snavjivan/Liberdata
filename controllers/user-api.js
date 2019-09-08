@@ -101,30 +101,41 @@ router.post('/search-interests', (req, res) => {
         if (search.title.includes('- Google Search')) {
             var dashIndex = search.title.indexOf('-');
             var trimmedSearch = search.title.substring(0, dashIndex);
-            console.log(trimmedSearch);
             batchedSearch.push(trimmedSearch);
         }
-        var categories;
-        var counter = 0;
-        var totalBatch = [];
-        for (var batchSearch of batchedSearch) {
-          if (counter >= 10) {
-            //console.log(batchSearch);
-            analyzeSyntaxOfText(totalBatch)
-              .then(cat => console.log(cat.name))
-              .catch(console.log);
-              totalBatch = [];
-              counter = 0;
-          } else if (counter < 10){
-            totalBatch.push(batchSearch);
-            counter++;
-          }
-        }
+        // var categories;
+        // var counter = 0;
+        // var totalBatch = [];
+        // for (var batchSearch of batchedSearch) {
+        //   if (counter >= 10) {
+        //     //console.log(batchSearch);
+        //     analyzeSyntaxOfText(totalBatch)
+        //       .then(cat => console.log(cat.name))
+        //       .catch(console.log);
+        //       totalBatch = [];
+        //       counter = 0;
+        //   } else if (counter < 10){
+        //     totalBatch.push(batchSearch);
+        //     counter++;
+        //   }
+        // }
       }
+      console.log(batchedSearch);
+      nlpLoop(batchedSearch).then(cat => cat.forEach(x => console.log(x.name))).catch(console.log);
     } else {
       res.json('None')
     }
 })
+
+const nlpLoop = async (batchedSearch) => {
+    var categories = [];
+    while (batchedSearch.length) {
+        console.log(batchedSearch.splice(0, 10).join(','));
+        var category = await analyzeSyntaxOfText(batchedSearch.splice(0, 10).join(','));
+        categories.push(category);
+    }
+    return categories;
+}
 
 router.post('/social-media-interests', (req, res) => {
     //for facebook
@@ -182,6 +193,7 @@ async function analyzeSyntaxOfText(text) {
   //   console.log(`Name: ${category.name}, Confidence: ${category.confidence}`);
   // });
   var name = classification.categories[0].name;
+  console.log(name);
   var confidence = classification.categories[0].confidence;
   return {name, confidence};
 }
