@@ -31,14 +31,20 @@ router.post('/postHistory', (req, res) => {
 })
 
 router.get('/raw-data', (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-  var responseValue = [...globalHostMap];
-  res.json(responseValue);
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    var responseValue = [...globalHostMap];
+    res.json(responseValue);
 })
+// router.post('/raw-data', (req, res) => {
+//     var response = JSON.stringify([...globalHostMap]);
+//     console.log(globalHostMap);
+//     res.json(response);
+// })
 
 //can take in the number of top sites, defaults to 5
 //use siteNum property in front end
 //this excludes google search as a popular site
+
 
 //FIX
 router.get('/top-sites-old', (req, res) => {
@@ -120,6 +126,7 @@ router.get('/top-sites', (req, res) => {
     var response = [...topSites];
     res.json(response);
 })
+
 
 
 router.get('/video-interests', (req, res) => {

@@ -1,8 +1,12 @@
 import React, {Component} from 'react';
-import logo from './logo.png';
-import './App.css';
+import { BrowserRouter as Router } from "react-router-dom";
+import { Route, Link } from "react-router-dom";
+import Login from './components/Login'
+import AllData from './components/AllData'
+import AnalyzeData from './components/AnalyzeData'
 
 class App extends Component {
+
   state = {list: []}
 
   //grabs json from the /api/list route
@@ -14,21 +18,11 @@ class App extends Component {
 
   render() {
     return (
-        <div className="App">
-        <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <h1>
-            Liberdata
-            </h1>
-            <a
-            className="App-link"
-            >
-            Disrupting personal data
-            </a>
-        </header>
-        <h1>List -- this is grabbing stuff from the back end</h1>
-            <div>{this.state.list}</div>
-        </div>
+      <Router basename="/">
+        <Route exact path="/" component={Login}/>
+        <Route exact path="/collect" component={AllData}/>
+        <Route exact path="/analyze" component={AnalyzeData}/>
+      </Router>
     );
   }
 }
