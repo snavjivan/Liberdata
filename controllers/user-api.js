@@ -107,7 +107,7 @@ router.post('/search-interests', (req, res) => {
             }
       }
     } else {
-      res.JSON('None')
+      res.json('None')
     }
     analyzeSyntaxOfText(batchedSearch.join(":_) ")).then(console.log
     ).catch(console.log);
