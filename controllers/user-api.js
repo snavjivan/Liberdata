@@ -223,16 +223,16 @@ router.get('/social-media-interests/facebook', (req, res) => {
     }
   })
 
-//fix
+
 router.get('/social-media-interests/reddit', (req, res) => {
-        res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     var redditHistory = globalHostMap.get('www.reddit.com');
     var batchedRSearch = [];
     if (redditHistory) {
         for (var reddit of redditHistory) {
             batchedRSearch.push(reddit.title);
         }
-        nlpLoop(batchedRSearch, (x) => {
+        nlpLoopNum(5, batchedRSearch, (x) => {
           var jsonArray = JSON.parse(JSON.stringify(x));
           console.log((jsonArray));
           res.json(jsonArray);
@@ -242,7 +242,7 @@ router.get('/social-media-interests/reddit', (req, res) => {
         res.json('None');
     }
 })
-//fix
+
 router.get('/email-interests', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     var emailHistory = globalHostMap.get('mail.google.com');
@@ -255,7 +255,7 @@ router.get('/email-interests', (req, res) => {
                 batchedSearch.push(trimmedEmail);
             }
         }
-        nlpLoop(batchedSearch, (x) => {
+        nlpLoopNum(6, batchedSearch, (x) => {
           var jsonArray = JSON.parse(JSON.stringify(x));
           console.log((jsonArray));
           res.json(jsonArray);
