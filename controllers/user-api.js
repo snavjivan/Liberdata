@@ -1,7 +1,7 @@
 const url = require('url');
 const express = require('express');
 const router = express.Router();
-//const nlp = require('../utils/nlp.js');
+const marketplace_db = require('../models/marketplace');
 
 //TODO: pls replace
 globalHostMap = new Map();
@@ -176,6 +176,7 @@ router.get('/recent-videos', (req, res) => {
         res.json('None');
     }
 })
+
 router.get('/search-interests', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     var searches = globalHostMap.get('www.google.com');
@@ -272,23 +273,31 @@ router.get('/email-interests', (req, res) => {
     }
 })
 
+router.post('/send-to-market', (req, res) => {
+    var name = req.body.name;
+    var interests = req.body.interests;
+    var price = req.body.price;
+    //Example entry: marketplace_db.addToMarket("ape", ['bananas', 'chimping', 'showers'], 0);
+    marketplace_db.addToMarket(name, interests, price);
+});
+
 async function analyzeSyntaxOfText(text) {
-  const language = require('@google-cloud/language');
-  const client = new language.LanguageServiceClient();
-  const document = {
+    const language = require('@google-cloud/language');
+    const client = new language.LanguageServiceClient();
+    const document = {
     content: text,
     type: 'PLAIN_TEXT',
-  };
-  const [classification] = await client.classifyText({document});
-  console.log('Categories:');
-  if (classification.categories[0]) {
+    };
+    const [classification] = await client.classifyText({document});
+    console.log('Categories:');
+    if (classification.categories[0]) {
     var name = classification.categories[0].name;
     var confidence = classification.categories[0].confidence;
-  } else {
-      var name = 'None';
-      var confidence = 0;
-  }
-  return {name, confidence};
+    } else {
+        var name = 'None';
+        var confidence = 0;
+    }
+    return {name, confidence};
 }
 
 const nlpLoop = (batchedSearch, callback) => {
@@ -306,6 +315,7 @@ const nlpLoop = (batchedSearch, callback) => {
             callback(values);
         });
 }
+
 const nlpLoopNum = (num, batchedSearch, callback) => {
     var promisesArray = [];
     while (batchedSearch.length) {
