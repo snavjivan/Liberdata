@@ -1,6 +1,7 @@
 const url = require('url');
 const express = require('express');
 const router = express.Router();
+//const nlp = require('../utils/nlp.js');
 
 //TODO: pls replace
 globalHostMap = new Map();
@@ -82,14 +83,21 @@ router.post('/favorite-videos')
 
 router.post('/search-interests', (req, res) => {
     var searches = globalHostMap.get('www.google.com');
+    var batchedSearch = [];
+
     for (var search of searches) {
-        if (search.title.includes('- Google Search')) {
-            var dashIndex = search.title.indexOf('-');
-            var trimmedSearch = search.title.substring(0, dashIndex);
-            console.log(trimmedSearch);
-            //do nlp stuff to get categories here
-        }
+          if (search.title.includes('- Google Search')) {
+              var dashIndex = search.title.indexOf('-');
+              var trimmedSearch = search.title.substring(0, dashIndex);
+              console.log(trimmedSearch);
+
+              batchedSearch.push(trimmedSearch);
+          }
     }
+
+
+    analyzeSyntaxOfText(batchedSearch.join(":_) ")).then(console.log
+  ).catch(console.log);
 })
 
 router.post('/social-media-interests', (req, res) => {
@@ -99,6 +107,23 @@ router.post('/social-media-interests', (req, res) => {
 
     //for twitter
 })
+
+async function analyzeSyntaxOfText(text) {
+  const language = require('@google-cloud/language');
+  const client = new language.LanguageServiceClient();
+  const document = {
+    content: text,
+    type: 'PLAIN_TEXT',
+  };
+  const [classification] = await client.classifyText({document});
+  console.log('Categories:');
+  // classification.categories.forEach(category => {
+  //   console.log(`Name: ${category.name}, Confidence: ${category.confidence}`);
+  // });
+  var name = classification.categories[0].name;
+  var confidence = classification.categories[0].confidence;
+  return {name, confidence};
+}
 
 //maybe add gmail
 //maybe use spotify api
