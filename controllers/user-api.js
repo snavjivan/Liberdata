@@ -103,39 +103,12 @@ router.post('/search-interests', (req, res) => {
             var trimmedSearch = search.title.substring(0, dashIndex);
             batchedSearch.push(trimmedSearch);
         }
-        // var categories;
-        // var counter = 0;
-        // var totalBatch = [];
-        // for (var batchSearch of batchedSearch) {
-        //   if (counter >= 10) {
-        //     //console.log(batchSearch);
-        //     analyzeSyntaxOfText(totalBatch)
-        //       .then(cat => console.log(cat.name))
-        //       .catch(console.log);
-        //       totalBatch = [];
-        //       counter = 0;
-        //   } else if (counter < 10){
-        //     totalBatch.push(batchSearch);
-        //     counter++;
-        //   }
-        // }
       }
-      console.log(batchedSearch);
-      nlpLoop(batchedSearch).then(cat => cat.forEach(x => console.log(x.name))).catch(console.log);
+      
     } else {
       res.json('None')
     }
 })
-
-const nlpLoop = async (batchedSearch) => {
-    var categories = [];
-    while (batchedSearch.length) {
-        console.log(batchedSearch.splice(0, 10).join(','));
-        var category = await analyzeSyntaxOfText(batchedSearch.splice(0, 10).join(','));
-        categories.push(category);
-    }
-    return categories;
-}
 
 router.post('/social-media-interests', (req, res) => {
     //for facebook
@@ -147,7 +120,7 @@ router.post('/social-media-interests', (req, res) => {
           if (fb.title.includes('Log')) {
           }  else if (fb.title.includes('Settings')) {
           }  else if (fb.title.includes('Facebook')) {
-          } else {}
+          } else {
             batchedFbSearch.push(fb.title);
           }
         }
@@ -182,7 +155,6 @@ router.post('/social-media-interests', (req, res) => {
         //no reddit history
         redditJson = 'None';
     }
-    //for twitter
     //combine above results into 1 json
 })
 
@@ -211,38 +183,31 @@ async function analyzeSyntaxOfText(text) {
   };
   const [classification] = await client.classifyText({document});
   console.log('Categories:');
-  // classification.categories.forEach(category => {
-  //   console.log(`Name: ${category.name}, Confidence: ${category.confidence}`);
-  // });
-  var name = classification.categories[0].name;
-  console.log(name);
-  var confidence = classification.categories[0].confidence;
+  if (classification.categories[0]) {
+    var name = classification.categories[0].name;
+    var confidence = classification.categories[0].confidence;
+  } else {
+      var name = 'None';
+      var confidence = 0;
+  }
   return {name, confidence};
 }
 
-// async function getCategories(batch, threshold) {
-//   var currentClassification = {name: 'none', confidence: 0};
-//   var categoryMap = new Map();
-//   var currentBatch = [];
-//   for (var entry of batch) {
-//     var text = currentBatch.join(',');
-//     analyzeSyntaxOfText(text)
-//       .then(cat => {
-//         // var categoryName = currentClassification.name;
-//         // var categoryConf = currentClassification.confidence;
-//         // if (cat.name !== categoryName || cat.confidence < threshold) {
-//         //   categoryMap.set(categoryName, categoryConf);
-//         //   currentClassification = cat;
-//         //   currentBatch = [];
-//         // } else {
-//         //   var averageConf = (categoryConf + cat.confidence) / 2;
-//         //   currentClassification.confidence = averageConf;
-//         // }
-//         console.log(cat.name);
-//
-//       })
-//       .catch(err => currentBatch.push(entry));
-//   }
-// }
+const nlpLoop = (batchedSearch, callback) => {
+    var promisesArray = [];
+    while (batchedSearch.length) {
+        if (batchedSearch.length >= 10) {
+            promisesArray.push(analyzeSyntaxOfText(batchedSearch.splice(0, 10).join(',')));
+            console.log(promisesArray);
+        } else {
+            batchedSearch = [];
+        }
+    }
+    Promise.all(promisesArray)
+        .then(values => {
+            callback(values);
+        });
+    return categories;
+}
 
 module.exports = router;
