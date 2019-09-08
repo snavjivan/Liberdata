@@ -73,3 +73,22 @@
   color: #61E786;
   font-family: 'Titillium Web', sans-serif;
 }
+
+.Sell {
+  background-color: #F5FFF4;
+  text-align: left;
+}
+
+.Sell-header {
+  padding: 50px;
+  margin-left: 175px;
+  margin-right: 175px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: left;
+  font-size: calc(10px + 2.5vmin);
+  color: #61E786;
+  font-family: 'Titillium Web', sans-serif;
+}

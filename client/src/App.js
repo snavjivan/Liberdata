@@ -4,6 +4,7 @@ import { Route, Link } from "react-router-dom";
 import Login from './components/Login'
 import AllData from './components/AllData'
 import AnalyzeData from './components/AnalyzeData'
+import Sell from './components/Sell'
 
 class App extends Component {
 
@@ -22,6 +23,7 @@ class App extends Component {
         <Route exact path="/" component={Login}/>
         <Route exact path="/collect" component={AllData}/>
         <Route exact path="/analyze" component={AnalyzeData}/>
+        <Route exact path="/sell" component={Sell}/>
       </Router>
     );
   }

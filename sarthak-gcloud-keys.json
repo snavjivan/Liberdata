@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "liberdata-252221",
+  "private_key_id": "6688faa8b90797a88f92bed022e26c5e21b28192",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCs6K3JIXP9n1tC\n7Uq/P+UMPKBHccW7VA1HIZBcDjXdTtE7x4F+PJBx2VOdA/ixIr26KgibyPClB/VE\nQAjjsbkFxhQjMH5sMR9Emc+Y8M4VxDalH3D6i0tUpEsGNBAEbq82sKrbhLcZSA31\npLIuSbNbZeWsMCpgkwEpP0CeAhH5e6TqiywMUIYG0lUXRC02JPf7uqxjuaRMedOD\ntoqwudJCdWpG8R3q0+/deS8uDhNpLzMghA14ux0+jZ2f0L7muNRe2ROv2nYJ33gy\nEDB4aIKC2FZw1ocybTQM24fNJMLmzqhG8TE1CoxP+sZx5a60OlMujknGvUAxERrE\nc5t9bey7AgMBAAECggEAEwNEK2vwm4B3V4T3hXoazzKnaSkQgLMTAVxRHwjiUWMb\nohgjnA7qzyoCMK9sHDDhbeQLWEigdXUfj2ap05JfnEvrO5ysehcYr2wTphHsh1Db\ntWJ0rjK85iIUAdWdtpm5Iylf+uK9WManNPiW2HzQKl+qVo8L9IdARxnRGs7IIoeQ\nv14WfKNI2v8pJQuN0vcH6QfiQE/HBiVuE5lS4RJV0lcKU8jM9nWv72j6pfBL2Luj\nEK5NkuHG8XhqsBRoc6a9uTYZdcoI/HA5vbI+mo6fKSj2M0sJhZ9jNEezmEui8ufZ\n4CWZxOuJQSR/he75AaPNJ15jxmiSgMvPVu/izwM4iQKBgQDVu5BA8dYFhFSs6sir\n1SOe4PNO1+r0yfQu7EJM5UZnvUhVOiKQtl3NDO9GZH7m7GPrj+0U2rJyC+DZyaYA\nTFdWZOi0rVsR6mHCY0Jvgvk9M0gsBLDWyiVUnXLiYC2/5Xsg4zHXKZQmK50ZEkz3\nGYX2LOeYAYcRYO8KioqIeHn/rQKBgQDPGl68KXE/hplogcNpRmcYF8pKxT/IdmRi\nX49jfuNqiykyviO/c2MwAKREK63r+Wt6SD/JFEglIdvsfol1B7S5XOFkPFxoW3Xd\nYnqRn6vETlzhJoLaLB4dPFD6x2C8OLQ1ylYq0IFGax2OT1IVzgtDWhNVoKIJrVHo\n6Ogx+fmLBwKBgEdtjYIG0C270ciQFkxGyMa6CtYYlq8EJxTfZDDqlqLowRmqeg6+\nw45ZekWeJELsUWBSEzta8zPmAFkIaO/Ek5ON2a84GC1elRkvru4xaTYowz/iuW6u\n09b5X4GD/wYYnROamfd8L8Sp4rCUSyBxaTGiRCuqpwcJzBlLv4xoJu1pAoGAL2OF\nUeDZvQN7juJCaJBnfqfS7hD8a05L4gajtMyQFQ0KvEWtwF0S0SUUcVTdUyWbZjup\n/MTbTUPWIuNBaLn+rHuIR3tYWbiz25hxG2lB0IVt00cQogN+UIpArWF5zRfchIJr\n/RgAvLA97xZPXhXrldnCmtFKwpQaLgU9PFJKu3kCgYBjMI+4aFuBto1H4VIVT/bU\nF9tHOTcqof7D+VYXm/EyEidVQN1zf9LBfgB+HUVceyRaAeZDJrj4QXI61AATxvcG\nsYWSz1EddDywPoiromGC7j9YyxZletqJxYYtlZY6zf3mL8pUQbgooJE5J2KCUQ5k\nC71b2wMTzPVEkIdmYSHmFA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "sarthaks@liberdata-252221.iam.gserviceaccount.com",
+  "client_id": "111128091761601060228",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/sarthaks%40liberdata-252221.iam.gserviceaccount.com"
+}
