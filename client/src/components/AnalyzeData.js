@@ -7,6 +7,25 @@ const { Meta } = Card;
 
 class AnalyzeData extends Component {
 
+  constructor() {
+    super();
+    this.state = {
+        topSites: []
+    }
+  }
+
+  componentDidMount() {
+    fetch('http://localhost:5000/user-api/top-sites')
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(responseValue) {
+        this.setState({topSites: JSON.stringify(responseValue)});
+      }).catch(e => {
+        console.log(e);
+      })
+  }
+
   render() {
     return (
       <div className="AnalyzeData">
@@ -34,9 +53,11 @@ class AnalyzeData extends Component {
                         title="Card title"
                         description={
                           <div>
-                            <p>Bullet 1</p>
-                            <p>Bullet 2</p>
-                            <p>Bullet 3</p>
+                            {
+                              this.state.topSites.map((site, number) => (
+                                <p>{site}</p>
+                              ))
+                            }
                           </div>
                         }
                       />
