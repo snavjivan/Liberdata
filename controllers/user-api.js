@@ -147,7 +147,7 @@ router.post('/social-media-interests', (req, res) => {
           if (fb.title.includes('Log')) {
           }  else if (fb.title.includes('Settings')) {
           }  else if (fb.title.includes('Facebook')) {
-          } else {}
+          } else {
             batchedFbSearch.push(fb.title);
           }
         }
