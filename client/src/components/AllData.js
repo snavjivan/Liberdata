@@ -5,9 +5,20 @@ import FadeIn from 'react-fade-in';
 
 class AllData extends Component {
 
+  componentDidMount() {
+    fetch('http://localhost:5000/user-api/raw-data')
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(responseValue) {
+      console.log(JSON.stringify(responseValue));
+    }).catch(e => {
+      console.log(e);
+    })
+  }
+
   render() {
     return (
-
         <div className="AllData">
         <header className="AllData-header">
           <h1>

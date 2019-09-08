@@ -30,16 +30,22 @@ router.post('/postHistory', (req, res) => {
     res.json(response)
 })
 
-router.post('/raw-data', (req, res) => {
-    var response = JSON.stringify([...globalHostMap]);
-    console.log(globalHostMap);
-    res.json(response);
+router.get('/raw-data', (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    var responseValue = [...globalHostMap];
+    res.json(responseValue);
 })
+// router.post('/raw-data', (req, res) => {
+//     var response = JSON.stringify([...globalHostMap]);
+//     console.log(globalHostMap);
+//     res.json(response);
+// })
 
 //can take in the number of top sites, defaults to 5
 //use siteNum property in front end
 //this excludes google search as a popular site
-router.post('/top-sites', (req, res) => {
+router.get('/top-sites', (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     var numSites;
     if (!req.body.siteNum) {
         numSites = 5;
@@ -79,7 +85,8 @@ router.post('/top-sites', (req, res) => {
     res.json(response);
 })
 
-router.post('/favorite-videos', (req, res) => {
+router.get('/favorite-videos', (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     var videos = globalHostMap.get('www.youtube.com');
     if (videos) {
         for (var video of videos) {
@@ -93,7 +100,8 @@ router.post('/favorite-videos', (req, res) => {
     }
 })
 
-router.post('/search-interests', (req, res) => {
+router.get('/search-interests', (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     var searches = globalHostMap.get('www.google.com');
     var batchedSearch = [];
     if(searches){
@@ -113,7 +121,8 @@ router.post('/search-interests', (req, res) => {
     ).catch(console.log);
 })
 
-router.post('/social-media-interests', (req, res) => {
+router.get('/social-media-interests', (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     //for facebook
     var fbJson = '';
     var fbHistory = globalHostMap.get('www.facebook.com');
