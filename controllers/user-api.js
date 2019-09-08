@@ -130,12 +130,34 @@ router.post('/social-media-interests', (req, res) => {
     //for facebook
     var fbJson = '';
     var fbHistory = globalHostMap.get('www.facebook.com');
+    var batchedFbSearch = [];
     if (fbHistory) {
         for (var fb of fbHistory) {
-            console.log(fb);
+          if (fb.title.includes('Log')) {
+          }  else if (fb.title.includes('Settings')) {
+          }  else if (fb.title.includes('Facebook')) {
+          } else {}
+            batchedFbSearch.push(fb.title);
+          }
         }
     } else {
         fbJson = 'None'
+    }
+    //for twitter
+    var twJson = '';
+    var twHistory = globalHostMap.get('twitter.com');
+    var batchedTwSearch = [];
+    if (twHistory) {
+        for (var tw of twitter) {
+            console.log(tw);
+            if (tw.url.includes('developer')) {
+            }  else if (tw.title.includes('Twitter')) {
+            } else {
+              batchedTwSearch.push(fb.title);
+            }
+        }
+    } else {
+        twJson = 'None'
     }
     //for reddit
     var redditJson = '';
