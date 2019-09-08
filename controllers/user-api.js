@@ -281,6 +281,14 @@ router.post('/send-to-market', (req, res) => {
     marketplace_db.addToMarket(name, interests, price);
 });
 
+router.get('/get-from-market', (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    marketplace_db.readFromMarket(data => {
+        var jsonArray = JSON.parse(JSON.stringify(data));
+        res.json(jsonArray);
+    });
+});
+
 async function analyzeSyntaxOfText(text) {
     const language = require('@google-cloud/language');
     const client = new language.LanguageServiceClient();
