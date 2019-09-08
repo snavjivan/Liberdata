@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import logo from './logo.png';
 import './App.css';
 import GoogleLogin from 'react-google-login';
-import { Redirect } from 'react-router-dom'
 
 class Login extends Component {
 
@@ -10,20 +9,18 @@ class Login extends Component {
 
     const responseGoogle = (response) => {
       console.log(response);
-      this.props.history.push('/alldata')
+      this.props.history.push('/collect')
     }
 
     return (
         <div className="Login">
         <header className="Login-header">
-            <h1>
+            <h1 className="main">
             Welcome to Liberdata
             </h1>
-            <a
-            className="accent"
-            >
+            <div className="accent">
             We're here to democratize your personal data.
-            </a>
+            </div>
             <br/>
             <GoogleLogin
               clientId="313865159596-tmjml77f6098ep4pndkecd313iot30ev.apps.googleusercontent.com" //CLIENTID NOT CREATED YET

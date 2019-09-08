@@ -2,28 +2,17 @@ import React, {Component} from 'react';
 import './App.css';
 import { Random, Wave } from 'react-animated-text';
 import FadeIn from 'react-fade-in';
+import { Button, Icon } from 'antd';
 
 class AllData extends Component {
-
-  componentDidMount() {
-    fetch('http://localhost:5000/user-api/raw-data')
-    .then(function(response) {
-      return response.json();
-    })
-    .then(function(responseValue) {
-      console.log(JSON.stringify(responseValue));
-    }).catch(e => {
-      console.log(e);
-    })
-  }
 
   render() {
     return (
         <div className="AllData">
         <header className="AllData-header">
-          <h1>
+          <h1 className="main">
           <Wave
-            text={"hey, Shark"}
+            text={"hey, Sarthak"}
             paused={false}
             iterations={1}
             effect="verticalFadeIn"
@@ -34,11 +23,52 @@ class AllData extends Component {
           </h1>
           <FadeIn delay={2000}>
             <div>
-              <a
+              <span
               className="accent"
               >
-              We found some data on you
-            </a>
+              We collected all your personal data you've put on the web.
+            </span>
+            <br/>
+            <br/>
+            <br/>
+            </div>
+            <div>
+              If you want, you can download all of your raw data.
+              <br/>
+              <Button
+              type="primary"
+              shape="round"
+              icon="download"
+              size="default"
+              onClick={() => fetch('http://localhost:5000/user-api/raw-data')
+                .then(function(response) {
+                  return response.json();
+                })
+                .then(function(responseValue) {
+                  var data = JSON.stringify(responseValue);
+                  var fileDownload = require('js-file-download');
+                  fileDownload(data, 'data.txt');
+                }).catch(e => {
+                  console.log(e);
+                })}
+              >
+                Download
+              </Button>
+              <br/>
+              <br/>
+              <br/>
+            </div>
+            <div className="accent">
+            Now, let's take a deeper look.
+            <br/>
+            <Button
+            type="primary"
+            shape="round"
+            size="large"
+            onClick={() => this.props.history.push('/analyze')}
+            >
+              Analyze my data <Icon type="right" />
+            </Button>
             </div>
           </FadeIn>
         </header>

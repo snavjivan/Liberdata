@@ -1,3 +1,5 @@
+@import '~antd/dist/antd.css';
+
 .switch-wrapper {
   position: relative;
   background-color: #F5FFF4;
@@ -7,6 +9,10 @@
   animation: App-logo-spin infinite 20s linear;
   height: 20vmin;
   pointer-events: none;
+}
+
+.main {
+  color: #61E786;
 }
 
 .accent {
@@ -44,6 +50,25 @@
   flex-direction: column;
   align-items: left;
   justify-content: left;
+  font-size: calc(10px + 2.5vmin);
+  color: #61E786;
+  font-family: 'Titillium Web', sans-serif;
+}
+
+.AnalyzeData {
+  background-color: #F5FFF4;
+  text-align: center;
+}
+
+.AnalyzeData-header {
+  padding: 50px;
+  margin-left: 150px;
+  margin-right: 150px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   font-size: calc(10px + 2.5vmin);
   color: #61E786;
   font-family: 'Titillium Web', sans-serif;

@@ -3,6 +3,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { Route, Link } from "react-router-dom";
 import Login from './components/Login'
 import AllData from './components/AllData'
+import AnalyzeData from './components/AnalyzeData'
 
 class App extends Component {
 
@@ -19,7 +20,8 @@ class App extends Component {
     return (
       <Router basename="/">
         <Route exact path="/" component={Login}/>
-        <Route exact path="/alldata" component={AllData}/>
+        <Route exact path="/collect" component={AllData}/>
+        <Route exact path="/analyze" component={AnalyzeData}/>
       </Router>
     );
   }

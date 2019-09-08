@@ -5,6 +5,7 @@
   "dependencies": {
     "antd": "^3.23.2",
     "babel-loader": "^8.0.6",
+    "js-file-download": "^0.4.8",
     "react": "^16.9.0",
     "react-animated-text": "^0.1.4",
     "react-delay": "^0.1.0",
