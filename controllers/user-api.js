@@ -30,16 +30,17 @@ router.post('/postHistory', (req, res) => {
     res.json(response)
 })
 
-router.post('/raw-data', (req, res) => {
-    var response = JSON.stringify([...globalHostMap]);
-    console.log(globalHostMap);
-    res.json(response);
+router.get('/raw-data', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  var responseValue = [...globalHostMap];
+  res.json(response);
 })
 
 //can take in the number of top sites, defaults to 5
 //use siteNum property in front end
 //this excludes google search as a popular site
-router.post('/top-sites', (req, res) => {
+router.get('/top-sites', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     var numSites;
     if (!req.body.siteNum) {
         numSites = 5;
@@ -75,25 +76,32 @@ router.post('/top-sites', (req, res) => {
         }
     }
     console.log(topSites);
-    var response = JSON.stringify([...topSites]);
+    var response = [...topSites];
     res.json(response);
 })
 
-router.post('/favorite-videos', (req, res) => {
+router.get('/favorite-videos', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     var videos = globalHostMap.get('www.youtube.com');
+    var batchedSearch = [];
+
     if (videos) {
         for (var video of videos) {
             if (video.title.includes('- YouTube')) {
                 var dashIndex = search.title.indexOf('-');
                 var trimmedVideo = search.title.substring(0, dashIndex);
                 console.log(trimmedVideo);
+                batchedSearch.push(trimmedSearch);
+
+
                 //do nlp stuff to get categories here
             }
         }
     }
 })
 
-router.post('/search-interests', (req, res) => {
+router.get('/search-interests', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     var searches = globalHostMap.get('www.google.com');
     var batchedSearch = [];
     if (searches) {
@@ -137,7 +145,9 @@ const nlpLoop = async (batchedSearch) => {
     return categories;
 }
 
-router.post('/social-media-interests', (req, res) => {
+router.get('/social-media-interests', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+
     //for facebook
     var fbJson = '';
     var fbHistory = globalHostMap.get('www.facebook.com');
@@ -186,7 +196,9 @@ router.post('/social-media-interests', (req, res) => {
     //combine above results into 1 json
 })
 
-router.post('/email-interests', (req, res) => {
+router.get('/email-interests', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+
     var emailHistory = globalHostMap.get('mail.google.com');
     if (emailHistory) {
         for (var email of emailHistory) {
