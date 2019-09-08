@@ -33,13 +33,15 @@ router.post('/postHistory', (req, res) => {
 router.get('/raw-data', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   var responseValue = [...globalHostMap];
-  res.json(response);
+  res.json(responseValue);
 })
 
 //can take in the number of top sites, defaults to 5
 //use siteNum property in front end
 //this excludes google search as a popular site
-router.get('/top-sites', (req, res) => {
+
+//FIX
+router.get('/top-sites-old', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     var numSites;
     if (!req.body.siteNum) {
@@ -49,7 +51,6 @@ router.get('/top-sites', (req, res) => {
     }
     var topSites = new Map();
     for (var key of globalHostMap.keys()) {
-        if (key != 'www.google.com') {
             var numViews = 0;
             //gets number of views for a certain key
             globalHostMap.get(key).forEach(value => {
@@ -73,6 +74,46 @@ router.get('/top-sites', (req, res) => {
                     topSites.set(key, numViews);
                 }
             }
+    }
+    console.log(topSites);
+    var response = [...topSites];
+    res.json(response);
+})
+
+router.get('/top-sites', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    var numSites;
+    if (!req.body.siteNum) {
+        numSites = 5;
+    } else {
+        numSites = req.body.siteNum;
+    }
+    var topSites = new Map();
+    for (var key of globalHostMap.keys()) {
+        if (!key.includes('google.com') && !(key.includes('localhost'))) {
+            var numViews = 0;
+            //gets number of views for a certain key
+            globalHostMap.get(key).forEach(value => {
+                numViews += value.visitCount;
+            });
+            if (topSites.size < numSites) {
+                topSites.set(key, numViews);
+            } else {
+                //gets least popular site in the map
+                var smallestKey = '';
+                var smallestViewNum;
+                for (var topSite of topSites.keys()) {
+                    if (!smallestKey || topSites.get(topSite) < smallestViewNum) {
+                        smallestKey = topSite;
+                        smallestViewNum = topSites.get(smallestKey);
+                    }
+                }
+                //replaces if current site has more views than least popular site
+                if (numViews > smallestViewNum) {
+                    topSites.delete(smallestKey);
+                    topSites.set(key, numViews);
+                }
+            }
         }
     }
     console.log(topSites);
@@ -80,26 +121,54 @@ router.get('/top-sites', (req, res) => {
     res.json(response);
 })
 
-router.get('/favorite-videos', (req, res) => {
+
+router.get('/video-interests', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     var videos = globalHostMap.get('www.youtube.com');
     var batchedSearch = [];
-
     if (videos) {
         for (var video of videos) {
             if (video.title.includes('- YouTube')) {
-                var dashIndex = search.title.indexOf('-');
-                var trimmedVideo = search.title.substring(0, dashIndex);
-                console.log(trimmedVideo);
-                batchedSearch.push(trimmedSearch);
-
-
-                //do nlp stuff to get categories here
+                var dashIndex = video.title.indexOf('-');
+                var trimmedVideo = video.title.substring(0, dashIndex);
+                //console.log(trimmedVideo);
+                batchedSearch.push(trimmedVideo);
             }
         }
+        /*console.log(batchedSearch);
+        var jsonArr = JSON.parse(JSON.stringify(batchedSearch));
+        res.json(jsonArr);*/
+        nlpLoopNum(5, batchedSearch, (x) => {
+          var jsonArray = JSON.parse(JSON.stringify(x));
+          console.log((jsonArray));
+          res.json(jsonArray);
+        });
+    } else {
+        res.json('None');
     }
 })
 
+router.get('/recent-videos', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    var videos = globalHostMap.get('www.youtube.com');
+    var batchedSearch = [];
+    if (videos) {
+        for (var video of videos) {
+            if (video.title.includes('- YouTube')) {
+                var dashIndex = video.title.indexOf('-');
+                var paramIndex = video.title.indexOf(')');
+                var trimmedVideo = video.title.substring(paramIndex + 1, dashIndex);
+                //console.log(trimmedVideo);
+                batchedSearch.push(trimmedVideo);
+            }
+        }
+        console.log(batchedSearch);
+        var jsonArr = JSON.parse(JSON.stringify(batchedSearch));
+        res.json(jsonArr);
+    } else {
+        res.json('None');
+    }
+})
 router.get('/search-interests', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     var searches = globalHostMap.get('www.google.com');
@@ -112,13 +181,24 @@ router.get('/search-interests', (req, res) => {
             batchedSearch.push(trimmedSearch);
         }
       }
-      
+
+      nlpLoop(batchedSearch, (x) => {
+        for (var xs in x){
+          if (xs.name == "None") {
+            delete x.xs;
+          }
+        }
+        var jsonArray = JSON.parse(JSON.stringify(x));
+        console.log((jsonArray));
+        res.json(jsonArray);
+        });
+
     } else {
       res.json('None')
     }
 })
 
-router.get('/social-media-interests', (req, res) => {
+router.get('/social-media-interests/facebook', (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     //for facebook
     var fbJson = '';
@@ -133,53 +213,53 @@ router.get('/social-media-interests', (req, res) => {
             batchedFbSearch.push(fb.title);
           }
         }
+        nlpLoop(batchedFbSearch, (x) => {
+          var jsonArray = JSON.parse(JSON.stringify(x));
+          console.log((jsonArray));
+          res.json(jsonArray);
+          });
     } else {
-        fbJson = 'None'
+      res.json('None')
     }
-    //for twitter
-    var twJson = '';
-    var twHistory = globalHostMap.get('twitter.com');
-    var batchedTwSearch = [];
-    if (twHistory) {
-        for (var tw of twitter) {
-            console.log(tw);
-            if (tw.url.includes('developer')) {
-            }  else if (tw.title.includes('Twitter')) {
-            } else {
-              batchedTwSearch.push(fb.title);
-            }
-        }
-    } else {
-        twJson = 'None'
-    }
-    //for reddit
-    var redditJson = '';
+  })
+
+//fix
+router.get('/social-media-interests/reddit', (req, res) => {
+        res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     var redditHistory = globalHostMap.get('www.reddit.com');
+    var batchedRSearch = [];
     if (redditHistory) {
         for (var reddit of redditHistory) {
-            console.log(reddit.title);
-            //do nlp title to get categories here.
+            batchedRSearch.push(reddit.title);
         }
+        nlpLoop(batchedRSearch, (x) => {
+          var jsonArray = JSON.parse(JSON.stringify(x));
+          console.log((jsonArray));
+          res.json(jsonArray);
+          });
     } else {
         //no reddit history
-        redditJson = 'None';
+        res.json('None');
     }
-    //combine above results into 1 json
 })
-
+//fix
 router.get('/email-interests', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-
     var emailHistory = globalHostMap.get('mail.google.com');
+    var batchedSearch = [];
     if (emailHistory) {
         for (var email of emailHistory) {
             if (email.title.includes('- Gmail')) {
                 var dashIndex = email.title.indexOf('-');
                 var trimmedEmail = email.title.substring(0, dashIndex);
-                console.log(trimmedEmail);
-                //do nlp stuff here
+                batchedSearch.push(trimmedEmail);
             }
         }
+        nlpLoop(batchedSearch, (x) => {
+          var jsonArray = JSON.parse(JSON.stringify(x));
+          console.log((jsonArray));
+          res.json(jsonArray);
+        });
     } else {
         res.json('None');
     }
@@ -218,7 +298,21 @@ const nlpLoop = (batchedSearch, callback) => {
         .then(values => {
             callback(values);
         });
-    return categories;
+}
+const nlpLoopNum = (num, batchedSearch, callback) => {
+    var promisesArray = [];
+    while (batchedSearch.length) {
+        if (batchedSearch.length >= num) {
+            promisesArray.push(analyzeSyntaxOfText(batchedSearch.splice(0, num).join(',')));
+            console.log(promisesArray);
+        } else {
+            batchedSearch = [];
+        }
+    }
+    Promise.all(promisesArray)
+        .then(values => {
+            callback(values);
+        });
 }
 
 module.exports = router;
